@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "993135574303",
+    "project_id": "badrapp-793b6",
+    "storage_bucket": "badrapp-793b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993135574303:android:80bd65ba6fa2da5af7042a",
+        "android_client_info": {
+          "package_name": "com.badrapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHvVB_0qYcp_x8iGH7XKP2CP8AM0LlZkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
