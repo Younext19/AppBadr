@@ -37,9 +37,12 @@ export default function Login() {
       {/* <Image/> */}
       <View style={{alignItems: 'center', marginTop: 40}}>
         <Image
-          style={{width: 200, height: 200}}
+          style={{width: 300, height: 100}}
           source={require('../../../assets/badrlogo.png')}
         />
+        <Text style={{fontWeight: 'bold', fontSize: 20, color: '#fff'}}>
+          Banque Construction Algerie
+        </Text>
       </View>
 
       <View style={{marginLeft: 20}}>
