@@ -1,8 +1,6 @@
 import React from 'react';
 import {Image, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './Home';
 import Profile from './Profile';
 import Virement from './Virement';

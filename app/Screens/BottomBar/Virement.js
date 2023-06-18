@@ -1,11 +1,32 @@
 import React, {useState} from 'react';
-import {Text, View, TouchableOpacity, TextInput} from 'react-native';
+import {Text, View, TouchableOpacity, TextInput, Alert} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
 export default function Virement() {
   let user = auth().currentUser;
   const uid = user.uid;
+  const [totalMoney, settotalMoney] = useState('');
+  const [alldata, setalldata] = useState({});
+  const [loading, setloading] = useState(false);
+  const VirementDone = () =>
+    Alert.alert('Virement Effectué', 'Consulter ton virement dans Accueil', [
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
+
+  firestore()
+    .collection('Users')
+    .doc(uid)
+    .get()
+    .then(res => {
+      if (res) {
+        const userData = res.data();
+        settotalMoney(userData.money);
+        setalldata(userData);
+      } else {
+        console.log('ée');
+      }
+    });
   var docRef = firestore().collection('Users').doc(uid);
   function SaveOfferToFS(data) {
     const userRefrence = firestore().collection('Virement').doc();
@@ -18,7 +39,8 @@ export default function Virement() {
         type: 'envoyé',
       })
       .then(res => {
-        console.log('offer added!');
+        setloading(false);
+        VirementDone();
       });
   }
   const [NomPrenom, setNomPrenom] = useState('');
@@ -94,8 +116,18 @@ export default function Virement() {
           onChangeText={v => {
             setValeur(v);
           }}
+          keyboardType="numeric"
         />
       </View>
+      {loading ? (
+        <View style={{alignItems: 'center'}}>
+          <Text style={{fontSize: 15, color: 'white'}}>
+            Wait data is loading ...
+          </Text>
+        </View>
+      ) : (
+        <View />
+      )}
       <View
         style={{
           flex: 1,
@@ -115,7 +147,15 @@ export default function Virement() {
           }}
           onPress={() => {
             // navigation.navigate('BottomNavigation', {screen: 'Home'});
-            SaveOfferToFS();
+            if (parseFloat(totalMoney) < parseFloat(Valeur)) {
+              console.log('errer');
+              Alert.alert('Virement Refusé', "Pas assez d'argent", [
+                {text: 'OK', onPress: () => console.log('OK logo')},
+              ]);
+            } else {
+              setloading(true);
+              SaveOfferToFS();
+            }
           }}>
           <Text style={{fontSize: 20, color: '#fff', fontWeight: 'bold'}}>
             Faire un virement

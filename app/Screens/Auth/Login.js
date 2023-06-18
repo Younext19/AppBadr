@@ -13,24 +13,32 @@ import auth from '@react-native-firebase/auth';
 export default function Login() {
   const [mail, setmail] = useState('');
   const [password, setpassword] = useState('');
+  const [incorrectForm, setincorrectForm] = useState(false);
   const navigation = useNavigation();
   function signin() {
-    auth()
-      .signInWithEmailAndPassword(mail, password)
-      .then(() => {
-        console.log('User account created & signed in!');
-      })
-      .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
-        }
+    // condition
+    if (mail !== '' && password !== '') {
+      auth()
+        .signInWithEmailAndPassword(mail, password)
+        .then(() => {
+          console.log('User account created & signed in!');
+        })
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            console.log('That email address is already in use!');
+            setincorrectForm;
+          }
 
-        if (error.code === 'auth/invalid-email') {
-          console.log('That email address is invalid!');
-        }
+          if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+            setincorrectForm;
+          }
 
-        console.error(error);
-      });
+          console.error(error);
+        });
+    } else {
+      setincorrectForm(true);
+    }
   }
   return (
     <ScrollView style={{flex: 1, backgroundColor: '#040D27'}}>
@@ -47,7 +55,7 @@ export default function Login() {
 
       <View style={{marginLeft: 20}}>
         <Text style={{fontSize: 40, fontWeight: 'bold', color: '#EBF0FF'}}>
-          Login
+          Se Connecter
         </Text>
         <View
           style={{
@@ -113,14 +121,24 @@ export default function Login() {
             marginTop: 5,
           }}>
           <Text style={{fontSize: 16, fontWeight: 'bold', color: '#EBF0FF'}}>
-            Forgot Password?
+            mot de passe oublié ?
           </Text>
         </View>
       </View>
+      {incorrectForm ? (
+        <View>
+          <Text style={{fontSize: 20, color: 'red'}}>
+            Formulaire incorrecte
+          </Text>
+        </View>
+      ) : (
+        <View />
+      )}
 
       <View
         style={{
           alignItems: 'center',
+
           justifyContent: 'center',
           flexDirection: 'column',
           marginTop: 20,
@@ -138,7 +156,7 @@ export default function Login() {
             signin();
           }}>
           <Text style={{fontWeight: 'bold', fontSize: 17, color: 'white'}}>
-            Login
+            Se connecter
           </Text>
         </TouchableOpacity>
         <View
@@ -152,7 +170,7 @@ export default function Login() {
                 fontWeight: 'bold',
                 color: '#EBF0FF',
               }}>
-              OR
+              OU
             </Text>
           </View>
           <View style={{width: '30%', height: 1, backgroundColor: '#EBF0FF'}} />
@@ -173,7 +191,7 @@ export default function Login() {
             navigation.navigate('Signup');
           }}>
           <Text style={{fontWeight: 'bold', fontSize: 17, color: 'white'}}>
-            Register a new account
+            Créer un compte{' '}
           </Text>
         </TouchableOpacity>
       </View>

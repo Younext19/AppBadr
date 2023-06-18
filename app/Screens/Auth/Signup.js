@@ -16,13 +16,18 @@ export default function Signup() {
   const [fullName, setfullName] = useState('azd');
   const [mail, setmail] = useState('fazf@gma.fr');
   const [password, setpassword] = useState('azdada');
+  const [IncorrectForm, setIncorrectForm] = useState(false);
 
   function signup() {
-    navigation.navigate('FirstSign', {
-      email: mail,
-      password: password,
-      fullName: fullName,
-    });
+    if (password.length >= 8) {
+      navigation.navigate('FirstSign', {
+        email: mail,
+        password: password,
+        fullName: fullName,
+      });
+    } else {
+      setIncorrectForm(true);
+    }
   }
 
   return (
@@ -53,7 +58,7 @@ export default function Signup() {
           }}>
           <Image
             style={{width: 25, height: 25}}
-            source={require('../../../assets/profile.png')}
+            source={require('../../../assets/profile2.png')}
           />
           <TextInput
             style={{
@@ -133,6 +138,15 @@ export default function Signup() {
           By signing in you're agree to our Terms & Conditions and Privacy
           Policy
         </Text>
+        {IncorrectForm ? (
+          <View>
+            <Text style={{fontSize: 20, color: 'red'}}>
+              Formulaire incorrecte
+            </Text>
+          </View>
+        ) : (
+          <View />
+        )}
 
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity

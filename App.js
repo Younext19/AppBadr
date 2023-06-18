@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Login from './app/Screens/Auth/Login';
-import Signup from './app/Screens/Auth/Signup';
 import BottomNavigation from './app/Screens/BottomBar/BottomNav';
 import AuthNavigator from './app/Screens/Auth/AuthNavigator';
 import auth from '@react-native-firebase/auth';

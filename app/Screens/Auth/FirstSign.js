@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -7,26 +13,15 @@ import firestore from '@react-native-firebase/firestore';
 export default function FirstSign({route, navigation}) {
   const [Phone, setPhone] = useState('pon');
   const [CardNum, setCardNum] = useState('num');
-  const [ExpDate, setExpDate] = useState('azd');
+  const [ExpDate, setExpDate] = useState('');
+  const [money, setmoney] = useState('');
   const [CVV, setCVV] = useState('dzdz');
   const {email, password, fullName} = route.params;
-  useEffect(() => {
-    console.log(route.params);
-    console.log(email);
-  });
+
   function signupDone() {
-    console.log({
-      name: fullName,
-      mail: email,
-      pw: password,
-      cardNumber: CardNum,
-      expDate: ExpDate,
-      cvv: CVV,
-    });
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(res => {
-        console.log('User account created & signed in!');
         firestore()
           .collection('Users')
           .doc(res.user.uid)
@@ -36,6 +31,7 @@ export default function FirstSign({route, navigation}) {
             cardNumber: CardNum,
             expDate: ExpDate,
             cvv: CVV,
+            money: money,
           })
           .then(() => {
             console.log('User added!');
@@ -54,7 +50,7 @@ export default function FirstSign({route, navigation}) {
       });
   }
   return (
-    <View
+    <ScrollView
       style={{
         flex: 1,
         flexDirection: 'column',
@@ -88,11 +84,13 @@ export default function FirstSign({route, navigation}) {
             color: '#EBF0FF',
             borderColor: '#EBF0FF',
           }}
-          placeholder={'+213 555555555'}
+          keyboardType="numeric"
+          placeholder={'0555555555'}
           placeholderTextColor={'#EBF0FF'}
           onChangeText={v => {
             setPhone(v);
           }}
+          maxLength={10}
         />
       </View>
       <View
@@ -121,6 +119,7 @@ export default function FirstSign({route, navigation}) {
             color: '#EBF0FF',
             borderColor: '#EBF0FF',
           }}
+          keyboardType="numeric"
           placeholderTextColor={'#EBF0FF'}
           placeholder={'5050 5050 5050 XXXX'}
           onChangeText={v => {
@@ -155,9 +154,16 @@ export default function FirstSign({route, navigation}) {
           }}
           placeholderTextColor={'#EBF0FF'}
           placeholder={'01/24'}
+          value={ExpDate}
           onChangeText={v => {
             setExpDate(v);
+            if (ExpDate.length === 1) {
+              console.log('ici');
+              setExpDate(v + '/');
+            }
           }}
+          keyboardType="numeric"
+          maxLength={5}
         />
       </View>
       <View
@@ -190,6 +196,43 @@ export default function FirstSign({route, navigation}) {
           onChangeText={v => {
             setCVV(v);
           }}
+          keyboardType="numeric"
+          maxLength={3}
+        />
+      </View>
+
+      <View
+        style={{
+          width: '50%',
+          height: 40,
+          flexDirection: 'column',
+          marginTop: 50,
+        }}>
+        <Text
+          style={{
+            marginLeft: 10,
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: '#EBF0FF',
+          }}>
+          Argent (DZD)
+        </Text>
+        <TextInput
+          style={{
+            width: '80%',
+            borderBottomWidth: 1,
+            padding: 3,
+            marginLeft: 10,
+            color: '#EBF0FF',
+            borderColor: '#EBF0FF',
+          }}
+          placeholder={'XXX'}
+          placeholderTextColor={'#EBF0FF'}
+          onChangeText={v => {
+            setmoney(v);
+          }}
+          keyboardType="numeric"
+          maxLength={10}
         />
       </View>
 
@@ -212,6 +255,6 @@ export default function FirstSign({route, navigation}) {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }

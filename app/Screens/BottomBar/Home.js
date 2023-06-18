@@ -14,6 +14,8 @@ import {useNavigation} from '@react-navigation/native';
 
 export default function Home() {
   const [NewVanData, setNewVanData] = useState([]);
+  const [cardNum, setcardNum] = useState('');
+  const [money, setmoney] = useState('');
   const users = auth().currentUser;
   useEffect(() => {
     refreshVirs();
@@ -37,6 +39,28 @@ export default function Home() {
       })
       .catch(error => {
         console.log({error});
+      });
+
+    firestore()
+      .collection('Users')
+      .doc(users.uid)
+      .get()
+      .then(res => {
+        if (res) {
+          const userData = res.data();
+          setcardNum(userData.cardNumber);
+          if (NewVanData.length !== 0) {
+            setmoney(userData.money - NewVanData[0].valeur);
+          } else {
+            setmoney(userData.money);
+          }
+          console.log(
+            '🚀 ~ file: Home.js:54 ~ refreshVirs ~ NewVanData:',
+            NewVanData,
+          );
+        } else {
+          console.log('ée');
+        }
       });
   }
 
@@ -98,7 +122,7 @@ export default function Home() {
             color: 'white',
             fontWeight: 'bold',
           }}>
-          5050 5050 3030 3030
+          {cardNum}{' '}
         </Text>
         <Text
           style={{
@@ -107,7 +131,7 @@ export default function Home() {
             color: '#EBF0FF',
             fontWeight: 'bold',
           }}>
-          35000.00 DZD
+          {money} DZD
         </Text>
       </View>
 
@@ -147,7 +171,7 @@ export default function Home() {
           renderItem={({item}) => {
             return <VanItem item={item} />;
           }}
-          keyExtractor={vanitem => vanitem.owner}
+          keyExtractor={vanitem => vanitem.motif}
           scrollEnabled={true}
           ListFooterComponent={<View style={{height: 20}} />}
         />
